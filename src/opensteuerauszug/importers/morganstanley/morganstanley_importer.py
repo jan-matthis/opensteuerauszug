@@ -364,6 +364,11 @@ class MorganStanleyImporter:
             security_stocks.append(_mutation(line.trade_date, n[0], n[1], "Sale"))
             cash_stocks.append(_cash(line.trade_date, n[-1], "Sale proceeds"))
 
+        elif line.kind == ActivityKind.SHARE_WITHDRAWAL:
+            if len(n) != 1 or n[0] >= 0:
+                raise ValueError(f"Unexpected Share Withdrawal row format in {context}")
+            security_stocks.append(_mutation(line.trade_date, n[0], None, "Share withdrawal"))
+
         elif line.kind == ActivityKind.DIVIDEND:
             _expect_numbers(n, context)
             cash_stocks.append(_cash(line.trade_date, n[0], "Dividend"))
@@ -591,7 +596,7 @@ def _expect_numbers(numbers: Tuple[Decimal, ...], context: str) -> None:
         raise ValueError(f"Missing amount in {context}")
 
 
-def _mutation(ref: date, quantity: Decimal, price: Decimal, name: str) -> SecurityStock:
+def _mutation(ref: date, quantity: Decimal, price: Optional[Decimal], name: str) -> SecurityStock:
     return SecurityStock(
         referenceDate=ref,
         mutation=True,

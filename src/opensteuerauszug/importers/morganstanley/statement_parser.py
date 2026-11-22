@@ -39,6 +39,7 @@ logger = logging.getLogger(__name__)
 class ActivityKind(Enum):
     RELEASE = auto()
     SALE = auto()
+    SHARE_WITHDRAWAL = auto()
     DIVIDEND = auto()
     WITHHOLDING = auto()
     WITHHOLDING_CANCEL = auto()
@@ -49,6 +50,7 @@ class ActivityKind(Enum):
 _ACTIVITY_KINDS = {
     "release": ActivityKind.RELEASE,
     "sale": ActivityKind.SALE,
+    "share withdrawal": ActivityKind.SHARE_WITHDRAWAL,
     "dividend credit": ActivityKind.DIVIDEND,
     "withholding tax": ActivityKind.WITHHOLDING,
     "cancel withholding tax": ActivityKind.WITHHOLDING_CANCEL,

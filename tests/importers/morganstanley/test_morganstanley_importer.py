@@ -135,6 +135,34 @@ def test_usd_cash_account_reports_year_end_balance():
     assert accounts[0].taxValue.balance == Decimal("0.00")
 
 
+def test_share_withdrawal_reduces_shares_without_affecting_cash():
+    q3 = statement_pages(
+        period="July 1 — September 30, 2025",
+        opening="7/1/25",
+        closing="9/30/25",
+        shares=("40.500", "0.000"),
+        cash=("$112.42", "$112.42"),
+        rows=[
+            "9/23/25 Share Withdrawal (40.500)",
+        ],
+    )
+    q4 = statement_pages(
+        period="October 1 — December 31, 2025",
+        opening="10/1/25",
+        closing="12/31/25",
+        shares=("0.000", "0.000"),
+        cash=("$112.42", "$112.42"),
+        rows=[],
+    )
+    statement = _import(_year(Q1_2025, Q2_2025, q3, q4))
+    security = _only_security(statement)
+    withdrawals = [s for s in security.stock if s.mutation and s.name == "Share withdrawal"]
+    assert [(s.referenceDate, s.quantity, s.unitPrice) for s in withdrawals] == [
+        (date(2025, 9, 23), Decimal("-40.500"), None),
+    ]
+    assert statement.listOfBankAccounts.bankAccount[0].taxValue.balance == Decimal("112.42")
+
+
 def test_cash_release_without_award_entry_is_rejected():
     q3 = statement_pages(
         period="July 1 — September 30, 2025",

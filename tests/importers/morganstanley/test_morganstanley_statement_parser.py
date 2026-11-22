@@ -58,6 +58,9 @@ def test_multi_word_activities_are_classified():
         ActivityKind.DISBURSEMENT
     )
     assert parse_activity_line("6/16/25 Dividend Credit $8.51 8.51").kind == (ActivityKind.DIVIDEND)
+    withdrawal = parse_activity_line("9/23/25 Share Withdrawal (200.000)")
+    assert withdrawal.kind == ActivityKind.SHARE_WITHDRAWAL
+    assert withdrawal.numbers == (Decimal("-200.000"),)
 
 
 def test_unrecognised_activity_is_flagged_unknown():

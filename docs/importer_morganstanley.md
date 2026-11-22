@@ -124,6 +124,7 @@ command-line version.
 | `Release <qty> <price>` | Vested shares deposited: security mutation at the vest price |
 | `Release <amount>` | Sold at vest (trading plan): matched to its entry in the award section and recorded as the shares received and sold on the vest date (at the sale price), plus the net proceeds in USD cash |
 | `Sale (<qty>) <price> <gross> <net>` | Security mutation (sale); net proceeds to USD cash |
+| `Share Withdrawal (<qty>)` | Security mutation (outbound share transfer, e.g. FOP to another broker); no cash movement |
 | `Dividend Credit` | Dividend payment on the security |
 | `Withholding Tax` | US withholding tax on the dividend of the same date |
 | `Cancel Withholding Tax` | Refund, netted into the withholding it brings down to the 15% treaty rate (matches the 1042-S) |
